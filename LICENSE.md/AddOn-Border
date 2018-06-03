@@ -1,33 +1,88 @@
 canvasbind = 2
 z1 = 0
 z2 = 0
+def check():
+    if canvasbind == 0:
+        maincanvas.bind("<B1-Motion>", draw)
+    if canvasbind == 1:
+        maincanvas.bind("<B1-Motion>", eyedropper)
+    if canvasbind == 2:
+        maincanvas.bind("<Button-1>", createrectangle2)
+        maincanvas.bind("<ButtonRelease-1>", createrectangle)
+    if canvasbind == 3:
+        maincanvas.bind("<Button-1>", createrectangle2)
+        maincanvas.bind("<ButtonRelease-1>", createellipse)
+    if canvasbind == 4:
+        maincanvas.bind("<Button-1>", createlasso)
+        maincanvas.bind("<ButtonRelease-1>", createlasso)
+    if canvasbind == 5:
+        maincanvas.bind("<Button-1>", createeraser)
+        maincanvas.bind("<ButtonRelease-1>", createeraser)
+    if canvasbind == 6:
+        maincanvas.bind("<Button-1>", createeraser)
+        maincanvas.bind("<ButtonRelease-1>", createeraser)
+
+def rectangle():
+    global canvasbind
+    canvasbind = 2
+    check()
+
+def ellipse():
+    global canvasbind
+    canvasbind = 3
+    check()
+
+def lasso():
+    global canvasbind
+    canvasbind = 4
+    check()
+
+def Draw():
+    global canvasbind
+    canvasbind = 0
+    check()
+
+def eraser():
+    global canvasbind
+    canvasbind = 5
+    check()
+
+def eyedropper():
+    global canvasbind
+    canvasbind = 1
+    check()
+
+def patch():
+    global canvasbind
+    canvasbind = 6
+    check()
 
 def createrectangle2(event):
     global z1,z2
-    z1, z2 = (event.x), (event.y)
+    z1, z2 = event.x, event.y
 
 def createrectangle(event):
     global z1, z2
-    x2, y2 = (event.x), (event.y)
+    x2, y2 = event.x, event.y
     maincanvas.create_rectangle(z1, z2, x2, y2, fill="", outline="Blue")
 
-def createellipse2(event):
-    global z1,z2
-    z1, z2 = (event.x), (event.y)
-
-def createellipse():
-    x1, y1 = (event.x), (event.y)
-    x2, y2 = (event.x), (event.y)
-    maincanvas.create_oval(x1, y1, x2, y2, fill="", outline="Blue")
+def createellipse(event):
+    global z1, z2
+    x1, y1 = event.x, event.y
+    x2, y2 = event.x, event.y
+    maincanvas.create_oval(z1, z2, x2, y2, fill="", outline="Blue")
 
 
-if canvasbind == 0:
-    maincanvas.bind("<B1-Motion>", draw)
-if canvasbind == 1:
-    maincanvas.bind("<B1-Motion>", eyedropper)
-if canvasbind == 2:
-    maincanvas.bind ("<Button-1>", createrectangle2)
-    maincanvas.bind ("<ButtonRelease-1>", createrectangle)
-if canvasbind == 3:
-    maincanvas.bind ("<Button-1>", createellipse2)
-    maincanvas.bind ("<ButtonRelease-1>", createellipse)
+rect_but = Button(backgroundcanvas, text="Create Rectangle", bg="White", command=rectangle)
+rect_but.place(x=0, y=100)
+ellipse_but = Button(backgroundcanvas, text="Create Ellipse", bg="White", command=ellipse)
+ellipse_but.place(x=0, y=130)
+lasso_but = Button(backgroundcanvas, text="Lasso", bg="White", command=lasso)
+lasso_but.place(x=0, y=160)
+Draw_but = Button(backgroundcanvas, text="Paintbrush", bg="White", command=Draw)
+Draw_but.place(x=0, y=190)
+Eraser_but = Button(backgroundcanvas, text="Eraser", bg="White", command=eraser)
+Eraser_but.place(x=0, y=220)
+Patch_but = Button(backgroundcanvas, text="Patch it up", bg="White", command=patch)
+Patch_but.place(x=0, y=250)
+main.mainloop()

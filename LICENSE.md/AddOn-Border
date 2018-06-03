@@ -1,0 +1,33 @@
+canvasbind = 2
+z1 = 0
+z2 = 0
+
+def createrectangle2(event):
+    global z1,z2
+    z1, z2 = (event.x), (event.y)
+
+def createrectangle(event):
+    global z1, z2
+    x2, y2 = (event.x), (event.y)
+    maincanvas.create_rectangle(z1, z2, x2, y2, fill="", outline="Blue")
+
+def createellipse2(event):
+    global z1,z2
+    z1, z2 = (event.x), (event.y)
+
+def createellipse():
+    x1, y1 = (event.x), (event.y)
+    x2, y2 = (event.x), (event.y)
+    maincanvas.create_oval(x1, y1, x2, y2, fill="", outline="Blue")
+
+
+if canvasbind == 0:
+    maincanvas.bind("<B1-Motion>", draw)
+if canvasbind == 1:
+    maincanvas.bind("<B1-Motion>", eyedropper)
+if canvasbind == 2:
+    maincanvas.bind ("<Button-1>", createrectangle2)
+    maincanvas.bind ("<ButtonRelease-1>", createrectangle)
+if canvasbind == 3:
+    maincanvas.bind ("<Button-1>", createellipse2)
+    maincanvas.bind ("<ButtonRelease-1>", createellipse)

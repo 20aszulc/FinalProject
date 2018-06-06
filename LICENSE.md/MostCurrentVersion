@@ -1,5 +1,5 @@
 from tkinter import *
-from PIL import Image
+from PIL import Image, ImageTk
 import random
 from numpy import array
 main = Tk()
@@ -8,16 +8,13 @@ screen_sizex = 1000
 screen_sizey = 1000
 work = True
 main.geometry("2000x1000")
+backgroundcanvas = Canvas(main, bg="grey", height=screen_sizey, width=screen_sizex)
+backgroundcanvas.place(x=0, y=0)
 maincanvas = Canvas(main, bg="white", height=screen_sizey-200, width=screen_sizex-200)
 maincanvas.place(x=100, y=0)
 google = PhotoImage(file="Vanilla Cupcake.png", width=screen_sizex, height=screen_sizey)
 boogle = maincanvas.create_image(screen_sizex/2, screen_sizey/2, image=google)
 userchoice = Image.open("Vanilla Cupcake.png")
-
-create_rectangle = Button()
-eyedropper = Button(command)#get pixel of image
-
-
 def file():
     global v, fileentry
     v = StringVar()
@@ -25,12 +22,15 @@ def file():
     fileentry.place(x=20, y=30)
     v.set("Vanilla Cupcake.png")
 
-def enter(event=None):
+def enter( event=None ):
     global google, v, fileentry
     dog = v.get()
     userchoice = Image.open(str(dog))
     userchoice.show()
-    fileentry.place_forget()
+    userim = PhotoImage(file=str(dog), width=screen_sizex, height=screen_sizey)
+    label = Label(maincanvas, image=userim)
+    label.image = userim
+    label.place(x=screen_sizex, y=screen_sizey)
 
 def file_values():
     global userchoice
@@ -52,19 +52,40 @@ def file_options():
     "Pixels to "
     userchoice.show()
 
+
 def draw(event):
     x1, y1 = (event.x - 10), (event.y - 10)
     x2, y2 = (event.x + 10), (event.y + 10)
     maincanvas.create_oval(x1, y1, x2, y2, fill="dodgerblue", outline='')
 
+
+def erase_circle(event):
+    x1, y1 = (event.x - 10), (event.y - 10)
+    x2, y2 = (event.x + 10), (event.y + 10)
+    maincanvas.create_oval(x1, y1, x2, y2, fill="white", outline='')
+
 def Erase():
     maincanvas.create_oval(-10000, -10000, 10000, 10000, fill="white", outline='')
+
+def createlasso(event):
+    global z1, z2, userchoice
+    x2, y2 = event.x, event.y
+    maincanvas.create_rectangle(z1, z2, x2, y2, fill="", outline="Black")
+    cropped = userchoice.crop((z1, z2, x2, y2,))
+    tk_im = ImageTk.PhotoImage(cropped)
+    maincanvas.create_image(250, 250, image=tk_im)
+    
 
 def drawimage(event):
     x1, y1 = (event.x - 10), (event.y - 10)
     maincanvas.create_image(x1, y1, image=google)
 
 #def drawgame():
+#at detected y start point
+#for x in range(0, screen_sizex/2):
+    #if asked point matches color say yes
+#for x in range(screen_sizex/2, screen_sizex):
+    #if asked point matches color say yes
 
 def image_one():
     im = Image.open('Underwater1.jpg', 'r')
@@ -140,7 +161,7 @@ optionmenu.add_command(label="Exit", command=main.quit)
 menubar.add_cascade(label="File Options", menu=optionmenu)
 
 drawmenu = Menu(menubar, tearoff=0)
-drawmenu.add_command(label="Erase", command=Erase)
+drawmenu.add_command(label="Erase all", command=Erase)
 #drawmenu.add_command(label="Draw image", command=drawimage)
 drawmenu.add_separator()
 drawmenu.add_command(label="Exit", command=main.quit)
@@ -149,7 +170,6 @@ menubar.add_cascade(label="Draw", menu=drawmenu)
 
 main.bind('<Return>', enter)
 main.config(menu=menubar)
-maincanvas.bind("<B1-Motion>", draw, drawimage)
 canvasbind = 2
 z1 = 0
 z2 = 0
@@ -165,11 +185,10 @@ def check():
         maincanvas.bind("<Button-1>", createrectangle2)
         maincanvas.bind("<ButtonRelease-1>", createellipse)
     if canvasbind == 4:
-        maincanvas.bind("<Button-1>", createlasso)
+        maincanvas.bind("<Button-1>", createrectangle2)
         maincanvas.bind("<ButtonRelease-1>", createlasso)
     if canvasbind == 5:
-        maincanvas.bind("<Button-1>", createeraser)
-        maincanvas.bind("<ButtonRelease-1>", createeraser)
+        maincanvas.bind("<B1-Motion>", erase_circle)
     if canvasbind == 6:
         maincanvas.bind("<Button-1>", createeraser)
         maincanvas.bind("<ButtonRelease-1>", createeraser)
@@ -220,7 +239,6 @@ def createrectangle(event):
 
 def createellipse(event):
     global z1, z2
-    x1, y1 = event.x, event.y
     x2, y2 = event.x, event.y
     maincanvas.create_oval(z1, z2, x2, y2, fill="", outline="Blue")
 
@@ -237,4 +255,11 @@ Eraser_but = Button(backgroundcanvas, text="Eraser", bg="White", command=eraser)
 Eraser_but.place(x=0, y=220)
 Patch_but = Button(backgroundcanvas, text="Patch it up", bg="White", command=patch)
 Patch_but.place(x=0, y=250)
+
 main.mainloop()
+
+
+
+
+#https://stackoverflow.com/questions/47475783/how-to-bind-enter-key-to-a-tkinter-button?rq=1
+ #Purose: Figue out RPG values of entire image and the RPG values different from surrounding image get a black line, the rest get a white pixel. Thus making an image of the face in drawing and black and white

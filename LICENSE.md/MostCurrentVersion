@@ -1,7 +1,8 @@
 from tkinter import *
 from PIL import Image, ImageTk
-import random
+#import cv2
 from numpy import array
+#https://www.pyimagesearch.com/2014/01/20/basic-image-manipulations-in-python-and-opencv-resizing-scaling-rotating-and-cropping/
 main = Tk()
 main.title("Drawing Images")
 screen_sizex = 1000
@@ -15,22 +16,25 @@ maincanvas.place(x=100, y=0)
 google = PhotoImage(file="Vanilla Cupcake.png", width=screen_sizex, height=screen_sizey)
 boogle = maincanvas.create_image(screen_sizex/2, screen_sizey/2, image=google)
 userchoice = Image.open("Vanilla Cupcake.png")
+label = Label(maincanvas, image="")
+label.place(x=50, y=50)
 def file():
     global v, fileentry
     v = StringVar()
     fileentry = Entry(maincanvas, textvariable=v, bd=5)
     fileentry.place(x=20, y=30)
-    v.set("Vanilla Cupcake.png")
+    v.set("background.png")
 
 def enter( event=None ):
-    global google, v, fileentry
+    global google, v, fileentry, label
     dog = v.get()
     userchoice = Image.open(str(dog))
     userchoice.show()
-    userim = PhotoImage(file=str(dog), width=screen_sizex, height=screen_sizey)
-    label = Label(maincanvas, image=userim)
-    label.image = userim
-    label.place(x=screen_sizex, y=screen_sizey)
+    #userim = PhotoImage(file=str(dog), width=screen_sizex, height=screen_sizey)
+    userim = ImageTk.PhotoImage(Image.open(str(dog)))
+    label.config(image=userim)
+    fileentry.place.forget()
+
 
 def file_values():
     global userchoice
@@ -45,7 +49,8 @@ def file_options():
     "Rotation:"
     userchoice.rotate(60)
     "Crop:"
-    userchoice.crop((5, 105, 5, 50))
+    cropped_image = userchoice.crop((5, 105, 5, 50))
+    cropped_image.show()
     "Red Color(# between 1-250)"
     "Green Color(# between 1-250)"
     "Blue Color(# between 1-250)"
@@ -74,7 +79,7 @@ def createlasso(event):
     cropped = userchoice.crop((z1, z2, x2, y2,))
     tk_im = ImageTk.PhotoImage(cropped)
     maincanvas.create_image(250, 250, image=tk_im)
-    
+
 
 def drawimage(event):
     x1, y1 = (event.x - 10), (event.y - 10)
@@ -83,9 +88,9 @@ def drawimage(event):
 #def drawgame():
 #at detected y start point
 #for x in range(0, screen_sizex/2):
-    #if asked point matches color say yes
+#if asked point matches color say yes
 #for x in range(screen_sizex/2, screen_sizex):
-    #if asked point matches color say yes
+#if asked point matches color say yes
 
 def image_one():
     im = Image.open('Underwater1.jpg', 'r')
@@ -176,6 +181,7 @@ z2 = 0
 def check():
     if canvasbind == 0:
         maincanvas.bind("<B1-Motion>", draw)
+        maincanvas.bind("<ButtonRelease-1>", draw)
     if canvasbind == 1:
         maincanvas.bind("<B1-Motion>", eyedropper)
     if canvasbind == 2:
@@ -189,9 +195,11 @@ def check():
         maincanvas.bind("<ButtonRelease-1>", createlasso)
     if canvasbind == 5:
         maincanvas.bind("<B1-Motion>", erase_circle)
+        maincanvas.bind("<ButtonRelease-1>",erase_circle)
     if canvasbind == 6:
         maincanvas.bind("<Button-1>", createeraser)
         maincanvas.bind("<ButtonRelease-1>", createeraser)
+        maincanvas.bind("<ButtonRelease-1>",)
 
 def rectangle():
     global canvasbind
@@ -262,4 +270,4 @@ main.mainloop()
 
 
 #https://stackoverflow.com/questions/47475783/how-to-bind-enter-key-to-a-tkinter-button?rq=1
- #Purose: Figue out RPG values of entire image and the RPG values different from surrounding image get a black line, the rest get a white pixel. Thus making an image of the face in drawing and black and white
+#Purose: Figue out RPG values of entire image and the RPG values different from surrounding image get a black line, the rest get a white pixel. Thus making an image of the face in drawing and black and white

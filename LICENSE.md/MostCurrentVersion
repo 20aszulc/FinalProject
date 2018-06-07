@@ -18,6 +18,7 @@ boogle = maincanvas.create_image(screen_sizex/2, screen_sizey/2, image=google)
 userchoice = Image.open("Vanilla Cupcake.png")
 label = Label(maincanvas, image="")
 label.place(x=50, y=50)
+color = ""
 def file():
     global v, fileentry
     v = StringVar()
@@ -59,9 +60,10 @@ def file_options():
 
 
 def draw(event):
+    global color
     x1, y1 = (event.x - 10), (event.y - 10)
     x2, y2 = (event.x + 10), (event.y + 10)
-    maincanvas.create_oval(x1, y1, x2, y2, fill="dodgerblue", outline='')
+    maincanvas.create_oval(x1, y1, x2, y2, fill=color, outline='')
 
 
 def erase_circle(event):
@@ -263,6 +265,68 @@ Eraser_but = Button(backgroundcanvas, text="Eraser", bg="White", command=eraser)
 Eraser_but.place(x=0, y=220)
 Patch_but = Button(backgroundcanvas, text="Patch it up", bg="White", command=patch)
 Patch_but.place(x=0, y=250)
+
+def yellow():
+    global color
+    color = "yellow"
+
+def blue():
+    global color
+    color = "blue"
+
+def red():
+    global color
+    color = "red"
+
+def purple():
+    global color
+    color = "purple"
+
+def green():
+    global color
+    color = "green"
+
+def magenta():
+    global color
+    color = "magenta"
+
+def black():
+    global color
+    color = "black"
+
+def orange():
+    global color
+    color = "orange"
+
+def filtergrey():
+    global filter
+    filter = "Grey"
+
+
+yellowb = Button(backgroundcanvas, text=" ", bg="Yellow", command=yellow)
+yellowb.place(x=500, y=screen_sizex-100)
+blueb = Button(backgroundcanvas, text=" ", bg="Blue", command=blue)
+blueb.place(x=100, y=screen_sizex-100)
+redb = Button(backgroundcanvas, text=" ", bg="Red", command=red)
+redb.place(x=600, y=screen_sizex-150)
+purpleb = Button(backgroundcanvas, text=" ", bg="Purple", command=purple)
+purpleb.place(x=200, y=screen_sizex-150)
+greenb = Button(backgroundcanvas, text=" ", bg="Green", command=green)
+greenb.place(x=700, y=screen_sizex-100)
+magentab = Button(backgroundcanvas, text=" ", bg="Magenta", command=magenta)
+magentab.place(x=300, y=screen_sizex-100)
+blackb = Button(backgroundcanvas, text=" ", bg="Black", command=black)
+blackb.place(x=800, y=screen_sizex-150)
+orangeb = Button(backgroundcanvas, text=" ", bg="Orange", command=orange)
+orangeb.place(x=400, y=screen_sizex-150)
+
+greyb = Button(backgroundcanvas, bg="Black", command=filtergrey, height=10, width=15)
+greyb.place(x=screen_sizex-100, y=screen_sizex/6)
+greyb = Button(backgroundcanvas, bg="Black", command=filtergrey, height=10, width=15)
+greyb.place(x=screen_sizex-100, y=screen_sizex/6)
+greyb = Button(backgroundcanvas, bg="Black", command=filtergrey, height=10, width=15)
+greyb.place(x=screen_sizex-100, y=screen_sizex/6)
+
 
 main.mainloop()
 

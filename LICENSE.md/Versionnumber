@@ -1,0 +1,342 @@
+from tkinter import *
+from PIL import Image, ImageTk
+#import cv2
+from numpy import array
+#https://www.pyimagesearch.com/2014/01/20/basic-image-manipulations-in-python-and-opencv-resizing-scaling-rotating-and-cropping/
+main = Tk()
+main.title("Drawing Images")
+screen_sizex = 1000
+screen_sizey = 1000
+work = True
+main.geometry("2000x1000")
+backgroundcanvas = Canvas(main, bg="grey", height=screen_sizey, width=screen_sizex)
+backgroundcanvas.place(x=0, y=0)
+maincanvas = Canvas(main, bg="white", height=screen_sizey-200, width=screen_sizex-200)
+maincanvas.place(x=100, y=0)
+google = PhotoImage(file="Vanilla Cupcake.png", width=screen_sizex, height=screen_sizey)
+boogle = maincanvas.create_image(screen_sizex/2, screen_sizey/2, image=google)
+userchoice = Image.open("Vanilla Cupcake.png")
+color = "Blue"
+
+
+def file():
+    global v, fileentry
+    v = StringVar()
+    fileentry = Entry(maincanvas, textvariable=v, bd=5)
+    fileentry.place(x=20, y=30)
+    v.set("background.png")
+
+def enter( event=None ):
+    global google, v, fileentry, label
+    dog = v.get()
+    userchoice = Image.open(str(dog))
+    userchoice.show()
+    #userim = PhotoImage(file=str(dog), width=screen_sizex, height=screen_sizey)
+    userim = ImageTk.PhotoImage(Image.open(str(dog)))
+    #tk_im = ImageTk.PhotoImage(file="New.png")
+    workin = maincanvas.create_image(screen_sizex / 2,  screen_sizey/ 2, image=userim)
+    workin = pack(x=screen_sizex / 2,  y=screen_sizey/ 2,)
+    fileentry.place.forget()
+
+
+def file_values():
+    global userchoice
+    width, height = userchoice.size
+    print("Width and Height are" + str(width) + " , " + str(height))
+
+def file_options():
+    global userchoice
+    #examps = maincanvas.create_image(random.randint(300, screen_sizex), random.randint(300, screen_sizex), image=google)
+    "Size:"
+    #userchoice.resize(100, 100)
+    "Rotation:"
+    #userchoice.rotate(60)
+    "Crop:"
+    cropped_image = userchoice.crop((5, 105, 5, 50))
+    cropped_image.save("New.png")
+    cropped_image.show()
+    "Red Color(# between 1-250)"
+    "Green Color(# between 1-250)"
+    "Blue Color(# between 1-250)"
+    "Pixels to "
+    userchoice.show()
+
+
+def draw(event):
+    global color
+    x1, y1 = (event.x - 10), (event.y - 10)
+    x2, y2 = (event.x + 10), (event.y + 10)
+    maincanvas.create_oval(x1, y1, x2, y2, fill=color, outline='')
+
+
+def erase_circle(event):
+    x1, y1 = (event.x - 10), (event.y - 10)
+    x2, y2 = (event.x + 10), (event.y + 10)
+    maincanvas.create_oval(x1, y1, x2, y2, fill="white", outline='')
+
+def Erase():
+    maincanvas.create_oval(-10000, -10000, 10000, 10000, fill="white", outline='')
+
+def createlasso(event):
+    global z1, z2, userchoice
+    x2, y2 = event.x, event.y
+    maincanvas.create_rectangle(z1, z2, x2, y2, fill="", outline="Black")
+    cropped = userchoice.crop((z1, z2, x2, y2,))
+    heyo = cropped.save("New.png")
+    tk_im = ImageTk.PhotoImage(file="New.png")
+    workin = maincanvas.create_image(screen_sizex / 2,  screen_sizey/ 2, image=tk_im)
+    workin = pack(x=screen_sizex / 2,  y=screen_sizey/ 2,)
+
+
+def drawimage(event):
+    x1, y1 = (event.x - 10), (event.y - 10)
+    maincanvas.create_image(x1, y1, image=google)
+
+#def drawgame():
+#at detected y start point
+#for x in range(0, screen_sizex/2):
+#if asked point matches color say yes
+#for x in range(screen_sizex/2, screen_sizex):
+#if asked point matches color say yes
+
+def image_one():
+    im = Image.open('Underwater1.jpg', 'r')
+    #rbg_im = im.convert('RGB')
+    pixel_values = list(im.getdata())
+    pixel_len = len(pixel_values)
+    width, height = im.size
+    pixelstuff = 0
+
+
+    pixel_values = list(im.getdata())
+    pixel_len = len(pixel_values)
+    print(pixel_len)
+    """""""""
+    for i in pixel_values:
+        pixelstuff = pixelstuff + pixel_values[i]
+    pixelstuff = pixelstuff / pixel_len
+    """""
+    for n, i in enumerate(pixel_values):
+        if i == (4, 100, 112):
+            pixel_values[n] = (0, 250, 0)
+
+    img_out = Image.new(im.mode, im.size)
+    print(pixel_values)
+    img_out.putdata(pixel_values)
+    img_out.show()
+
+
+"""""""""
+h = 1
+listss = []
+w = 1
+while h < height:
+    while w < width:
+        r, g, b = rbg_im.getpixel((w, h))
+        if r == 0:
+        print(r, g, b)
+        listss.append((r, g, b))
+        w = w + 1
+    h = h + 1
+
+width, height = im.size
+pixel_values = list(im.getdata())
+pixel_len = len(pixel_values)
+print(pixel_values)
+print(pixel_len)
+
+for i in range(pixel_len):
+    if not pixel_values[i] == (255, 255, 255, 0):
+        pixel_values[i] = (0, 0, 0, 0)
+print(pixel_values)
+
+img = Image.new(pixel_values, im.size)
+img.load()
+img.show()
+"""""""""""
+menubar = Menu(main)
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="Image Example", command=image_one)
+filemenu.add_command(label="Choose an image file", command=file)
+filemenu.add_command(label="File Values", command=file_values)
+filemenu.add_separator()
+filemenu.add_command(label="Exit", command=main.quit)
+menubar.add_cascade(label="File", menu=filemenu)
+
+optionmenu = Menu(menubar, tearoff=0)
+optionmenu.add_command(label="Crop", command=file_options)
+optionmenu.add_command(label="Resize", command=file_options)
+optionmenu.add_command(label="Rotation", command=file_options)
+optionmenu.add_command(label="Add Text", command=file_options)
+optionmenu.add_separator()
+optionmenu.add_command(label="Exit", command=main.quit)
+menubar.add_cascade(label="File Options", menu=optionmenu)
+
+drawmenu = Menu(menubar, tearoff=0)
+drawmenu.add_command(label="Erase all", command=Erase)
+#drawmenu.add_command(label="Draw image", command=drawimage)
+drawmenu.add_separator()
+drawmenu.add_command(label="Exit", command=main.quit)
+menubar.add_cascade(label="Draw", menu=drawmenu)
+
+
+main.bind('<Return>', enter)
+main.config(menu=menubar)
+canvasbind = 2
+z1 = 0
+z2 = 0
+def check():
+    if canvasbind == 0:
+        maincanvas.bind("<B1-Motion>", draw)
+        maincanvas.bind("<ButtonRelease-1>", draw)
+    if canvasbind == 1:
+        maincanvas.bind("<B1-Motion>", eyedropper)
+    if canvasbind == 2:
+        maincanvas.bind("<Button-1>", createrectangle2)
+        maincanvas.bind("<ButtonRelease-1>", createrectangle)
+    if canvasbind == 3:
+        maincanvas.bind("<Button-1>", createrectangle2)
+        maincanvas.bind("<ButtonRelease-1>", createellipse)
+    if canvasbind == 4:
+        maincanvas.bind("<Button-1>", createrectangle2)
+        maincanvas.bind("<ButtonRelease-1>", createlasso)
+    if canvasbind == 5:
+        maincanvas.bind("<B1-Motion>", erase_circle)
+        maincanvas.bind("<ButtonRelease-1>",erase_circle)
+    if canvasbind == 6:
+        maincanvas.bind("<Button-1>", createeraser)
+        maincanvas.bind("<ButtonRelease-1>", createeraser)
+        maincanvas.bind("<ButtonRelease-1>",)
+
+def rectangle():
+    global canvasbind
+    canvasbind = 2
+    check()
+
+def ellipse():
+    global canvasbind
+    canvasbind = 3
+    check()
+
+def lasso():
+    global canvasbind
+    canvasbind = 4
+    check()
+
+def Draw():
+    global canvasbind
+    canvasbind = 0
+    check()
+
+def eraser():
+    global canvasbind
+    canvasbind = 5
+    check()
+
+def eyedropper():
+    global canvasbind
+    canvasbind = 1
+    check()
+
+def patch():
+    global canvasbind
+    canvasbind = 6
+    check()
+
+def createrectangle2(event):
+    global z1,z2
+    z1, z2 = event.x, event.y
+
+def createrectangle(event):
+    global z1, z2
+    x2, y2 = event.x, event.y
+    maincanvas.create_rectangle(z1, z2, x2, y2, fill="", outline="Blue")
+
+def createellipse(event):
+    global z1, z2
+    x2, y2 = event.x, event.y
+    maincanvas.create_oval(z1, z2, x2, y2, fill="", outline="Blue")
+
+
+rect_but = Button(backgroundcanvas, text="Create Rectangle", bg="White", command=rectangle)
+rect_but.place(x=0, y=100)
+ellipse_but = Button(backgroundcanvas, text="Create Ellipse", bg="White", command=ellipse)
+ellipse_but.place(x=0, y=130)
+lasso_but = Button(backgroundcanvas, text="Lasso", bg="White", command=lasso)
+lasso_but.place(x=0, y=160)
+Draw_but = Button(backgroundcanvas, text="Paintbrush", bg="White", command=Draw)
+Draw_but.place(x=0, y=190)
+Eraser_but = Button(backgroundcanvas, text="Eraser", bg="White", command=eraser)
+Eraser_but.place(x=0, y=220)
+Patch_but = Button(backgroundcanvas, text="Patch it up", bg="White", command=patch)
+Patch_but.place(x=0, y=250)
+
+def yellow():
+    global color
+    color = "yellow"
+
+def blue():
+    global color
+    color = "blue"
+
+def red():
+    global color
+    color = "red"
+
+def purple():
+    global color
+    color = "purple"
+
+def green():
+    global color
+    color = "green"
+
+def magenta():
+    global color
+    color = "magenta"
+
+def black():
+    global color
+    color = "black"
+
+def orange():
+    global color
+    color = "orange"
+
+def filtergrey():
+    global filter
+    filter = "Grey"
+
+
+yellowb = Button(backgroundcanvas, text=" ", bg="Yellow", command=yellow)
+yellowb.place(x=500, y=screen_sizex-100)
+blueb = Button(backgroundcanvas, text=" ", bg="Blue", command=blue)
+blueb.place(x=100, y=screen_sizex-100)
+redb = Button(backgroundcanvas, text=" ", bg="Red", command=red)
+redb.place(x=600, y=screen_sizex-150)
+purpleb = Button(backgroundcanvas, text=" ", bg="Purple", command=purple)
+purpleb.place(x=200, y=screen_sizex-150)
+greenb = Button(backgroundcanvas, text=" ", bg="Green", command=green)
+greenb.place(x=700, y=screen_sizex-100)
+magentab = Button(backgroundcanvas, text=" ", bg="Magenta", command=magenta)
+magentab.place(x=300, y=screen_sizex-100)
+blackb = Button(backgroundcanvas, text=" ", bg="Black", command=black)
+blackb.place(x=800, y=screen_sizex-150)
+orangeb = Button(backgroundcanvas, text=" ", bg="Orange", command=orange)
+orangeb.place(x=400, y=screen_sizex-150)
+
+greyb = Button(backgroundcanvas, bg="Black", command=filtergrey, height=10, width=15)
+greyb.place(x=screen_sizex-100, y=screen_sizex/6)
+greyb = Button(backgroundcanvas, bg="Black", command=filtergrey, height=10, width=15)
+greyb.place(x=screen_sizex-100, y=screen_sizex/6)
+greyb = Button(backgroundcanvas, bg="Black", command=filtergrey, height=10, width=15)
+greyb.place(x=screen_sizex-100, y=screen_sizex/6)
+
+
+main.mainloop()
+
+
+
+
+#https://stackoverflow.com/questions/47475783/how-to-bind-enter-key-to-a-tkinter-button?rq=1
+#Purose: Figue out RPG values of entire image and the RPG values different from surrounding image get a black line, the rest get a white pixel. Thus making an image of the face in drawing and black and white
